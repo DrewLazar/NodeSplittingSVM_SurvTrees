@@ -3,7 +3,6 @@ library(data.tree)
 library(survival)
 library(dplyr)
 
-
 UnivariateSurvivalTree = R6Class(
   
   
@@ -75,6 +74,9 @@ UnivariateSurvivalTree = R6Class(
               }
               lrstat.old=lrstat
               k=k+1
+            }
+            if (lrstat==0) 
+            {lrstat.max=0; split.pos=n
             }
           }
           opt.split.bycov[i,1]=self$covariates[i]
