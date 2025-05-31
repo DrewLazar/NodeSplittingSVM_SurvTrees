@@ -58,8 +58,8 @@ UnivariateSurvivalTree = R6Class(
         else{
           data.sort<- data %>% arrange(data[self$covariates[i]])
           n = nrow(data)
-          lrstat.old=0
-          k=1
+          lrstat.old=0; lrstat.max=0
+          k=2
           while (k<=n-1){
             while ((data.sort[self$covariates[i]][k,]==data.sort[self$covariates[i]][k+1,]) & k<n){
               k=k+1
@@ -68,7 +68,7 @@ UnivariateSurvivalTree = R6Class(
               ind=c(rep(1,k),rep(0,n-k))
               Y<-Surv(data.sort[self$time][[1]],data.sort[self$censor][[1]]==1)
               lrstat=survdiff(Y~ind)[[5]]
-              if (lrstat>lrstat.old){
+              if (lrstat>lrstat.max){
                 lrstat.max=lrstat
                 split.pos=k 
               }
@@ -139,7 +139,7 @@ UnivariateSurvivalTree = R6Class(
       dataflr=data1[subsetX,]
       Y<-Surv(dataflr[time1][[1]],dataflr[censor1][[1]]==1)
       lrstat=survdiff(Y~splits<=0)[[5]]
-      return(lrstat)
+      return(lrstat/2)
     },
     #Compute the KM censoring estimate
     KM.compute = function(X){
