@@ -1,8 +1,8 @@
 Brierscore2 = function(fold,ourtree,ourmodel,t,splitrule){
 testdata=ourmodel$traindata[fold,]
 n = nrow(testdata)
-#kmCfit = survfit(Surv(testdata$survt,testdata$status==0)~1)
-kmCfit = survfit(Surv(ourmodel$traindata$stop,ourmodel$traindata$status==0)~1)
+kmCfit = survfit(Surv(testdata$stop,testdata$status==0)~1)
+#kmCfit = survfit(Surv(ourmodel$traindata$stop,ourmodel$traindata$status==0)~1)
 X = testdata[ourmodel$covariates]
 s=rep(0,n)
 for (i in 1:n){
@@ -38,10 +38,3 @@ Int_Brierscore = function(fold,ourtree,ourmodel,ts,splitrule){
 IBS = trapz(ts,BSt)/max(ts)
 }
 
-fold=folds[[i]]
-ourtree=dipolartree.kfold.prune
-ourmodel=Dipolar.model
-#t=3
-splitrule=0
-
-#a=Brierscore2(fold,ourtree,ourmodel,t,splitrule)
