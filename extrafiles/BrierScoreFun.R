@@ -1,14 +1,13 @@
 Brierscore2 = function(fold,ourtree,ourmodel,t,splitrule){
 testdata=ourmodel$traindata[fold,]
 n = nrow(testdata)
-kmCfit = survfit(Surv(testdata$survt,testdata$status==0)~1)
-if (is.null(ourmodel$augmentedcovariates)){
-  X = testdata[ourmodel$covariates]
-} else X = testdata[ourmodel$augmentedcovariates]
+#kmCfit = survfit(Surv(testdata$survt,testdata$status==0)~1)
+kmCfit = survfit(Surv(ourmodel$traindata$stop,ourmodel$traindata$status==0)~1)
+X = testdata[ourmodel$covariates]
 s=rep(0,n)
 for (i in 1:n){
-  pred = predfunction(ourtree,as.numeric(as.vector(X[i,])),t,splitrule)[[2]]
-  T = testdata['survt'][i,]; d = testdata['status'][i,]
+  pred = predfunction(ourmodel,ourtree,as.numeric(as.vector(X[i,])),t,splitrule)[[2]]
+  T = testdata['stop'][i,]; d = testdata['status'][i,]
   GT = summary(kmCfit,times=T)[[6]]; 
   if (GT==0){
     y=summary(kmCfit)[[6]]
@@ -19,6 +18,7 @@ for (i in 1:n){
     }
   Gt = summary(kmCfit,times=t,extend=TRUE)[[6]]
   s[i] = pred^2*1*(T<=t)*d/GT +  (1-pred)^2*1*(T>t)/Gt
+  
 }
 s=sum(s)/n; 
 }
@@ -38,4 +38,10 @@ Int_Brierscore = function(fold,ourtree,ourmodel,ts,splitrule){
 IBS = trapz(ts,BSt)/max(ts)
 }
 
+fold=folds[[i]]
+ourtree=dipolartree.kfold.prune
+ourmodel=Dipolar.model
+#t=3
+splitrule=0
 
+#a=Brierscore2(fold,ourtree,ourmodel,t,splitrule)
