@@ -1,1 +1,2 @@
-Code, data and latex files for paper Induction of Survival Trees by Quadric Splits and Dipolar Splitting Criteria
+Code and data for paper Node Splitting SVMs for Survival Trees Based on
+an L2-Regularized Dipole Splitting Criteria
